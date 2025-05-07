@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chava - Servicios Técnicos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        /* Barra de navegación */
+        .nav-bar {
+            background-color: #000000;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: 'Comfortaa', cursive;
+            z-index: 1001;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        /* Menú Hamburguesa */
+        .menu-icon {
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+            z-index: 1001;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            height: 100%;
+            background-color: #00256f;
+            transition: 0.3s;
+            z-index: 999;
+            padding: 2rem;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .close-menu {
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 998;
+            display: none;
+        }
+
+        /* Sección de servicios */
+        .servicios {
+            padding: 4rem 2rem;
+            background-color: #f0f4f8;
+        }
+
+        .servicio-titulo {
+            text-align: center;
+            margin: 0rem 0rem 2rem 0rem; /* Añadido margen vertical */
+        }
+
+        .servicios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .servicio-card {
+            background-color: white;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #00256f;
+            overflow: hidden;
+        }
+
+        /* Nuevos estilos para subservicios */
+        .servicio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .subservicios {
+            display: none;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .servicio-card.active .subservicios {
+            display: block;
+        }
+
+        .subservicio {
+            background-color: rgba(0, 37, 111, 0.05);
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .subservicio:hover {
+            background-color: rgba(0, 37, 111, 0.1);
+            transform: translateX(5px);
+        }
+
+        .subservicio button {
+            background-color: #00256f;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .subservicio button:hover {
+            background-color: #001a4a;
+        }
+
+        .servicio-card.active {
+            background-color: #00256f;
+            color: white;
+        }
+
+        .servicio-card.active .subservicio {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sobre Nosotros */
+        .sobre-nosotros {
+            padding: 4rem 2rem;
+            background-color: #00256f;
+            color: white;
+            text-align: center;
+        }
+
+        /* Redes Sociales */
+        .redes-sociales {
+            padding: 4rem 2rem;
+            background-color: white;
+            text-align: center;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00256f;
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .menu-icon {
+                display: block;
+            }
+            
+            .servicios-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-menu {
+                width: 250px;
+            }
+
+            /* Alineación texto sobre nosotros */
+            .sobre-nosotros p {
+                text-align: left;
+                /*padding: 0 1rem;*/
+            }
+
+            /* Ajustes redes sociales */
+            .social-item span {
+                display: none;
+            }
+
+
+            .social-icons {
+                gap: 1.5rem;
+                row-gap: 2rem;
+            }
+
+            .social-item {
+                flex: 0 0 30%;
+                justify-content: center;
+            }
+        }
+
+        /* Nuevo icono TikTok 
+        .fa-tiktok {
+            font-size: 1.2em;
+            vertical-align: middle;
+        }*/
+          /* Modal personalizado */
+          .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 10000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            height: 150px;
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 2px solid #00256f;
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-button {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-send {
+            background-color: #00256f;
+            color: white;
+        }
+
+        .modal-cancel {
+            background-color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="logo">CHAVA</div>
+        <i class="menu-icon fas fa-bars"></i>
+        <div class="nav-links">
+            <a href="#servicios">Servicios</a>
+            <a href="#nosotros">Sobre Nosotros</a>
+            <a href="#redes">Síguenos</a>
+        </div>
+    </nav>
+
+    <!-- Menú móvil -->
+    <div class="mobile-menu">
+        <i class="close-menu fas fa-times" onclick="closeMenu()"></i>
+        <a href="#servicios" onclick="closeMenu()">Servicios</a>
+        <a href="#nosotros" onclick="closeMenu()">Sobre Nosotros</a>
+        <a href="#redes" onclick="closeMenu()">Síguenos</a>
+    </div>
+    <div class="overlay" onclick="closeMenu()"></div>
+
+    <section class="servicios" id="servicios">
+        <div class="servicio-titulo">
+            <h2>¿Que servicios necesita?</h2>
+        </div>
+        <div class="servicios-grid">
+            <!-- Servicio de Electricidad -->
+            <div class="servicio-card" onclick="toggleDetails(this)">
+                <div class="servicio-header">
+                    <h2>Electricidad</h2>
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="subservicios">
+                    <div class="subservicio">
+                        <span>Cortocircuito</span>
+                        <div>
+                            <button onclick="solicitarServicio('Electricidad - Cortocircuito')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Ducha eléctrica</span>
+                        <div>
+                            <button onclick="solicitarServicio('Electricidad - Ducha eléctrica')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Tomas/focos dañados</span>
+                        <div>
+                            <button onclick="solicitarServicio('Electricidad - Tomas/focos dañados')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Otros</span>
+                        <div>
+                            <button onclick="solicitarServicio('Electricidad - Otros')">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Servicio de Plomería -->
+            <div class="servicio-card" onclick="toggleDetails(this)">
+                <div class="servicio-header">
+                    <h2>Plomería</h2>
+                    <i class="fas fa-faucet"></i>
+                </div>
+                <div class="subservicios">
+                    <div class="subservicio">
+                        <span>Goteras en los grifos</span>
+                        <div>
+                            <button onclick="solicitarServicio('Plomería - Goteras en los grifos')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Lavavajillas o lavamanos tapados</span>
+                        <div>
+                            <button onclick="solicitarServicio('Plomería - Lavavajillas o lavamanos tapados')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Fugas en las cañerías</span>
+                        <div>
+                            <button onclick="solicitarServicio('Plomería - Fugas en las cañerías')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Otros</span>
+                        <div>
+                            <button onclick="solicitarServicio('Plomería - Otros')">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Servicio de Reparación -->
+            <div class="servicio-card" onclick="toggleDetails(this)">
+                <div class="servicio-header">
+                    <h2>Reparación de Electrodomésticos</h2>
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="subservicios">
+                    <div class="subservicio">
+                        <span>lavadoras</span>
+                        <div>
+                            <button onclick="solicitarServicio('Reparación - Lavadoras')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Refrigeradores</span>
+                        <div>
+                            <button onclick="solicitarServicio('Reparación - Refrigeradores')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Aire acondicionado</span>
+                        <div>
+                            <button onclick="solicitarServicio('Reparación - Aire acondicionado')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                        <span>Freezer</span>
+                        <div>
+                            <button onclick="solicitarServicio('Reparación - Freezer')">Solicitar</button>
+                        </div>
+                    </div>
+                    <div class="subservicio">
+                            <span>Otros</span>
+                        <div>
+                            <button type="button" onclick="solicitarServicio('Reparación - Otros')">Solicitar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Modal para Otros -->
+        <div class="custom-modal" id="otrosModal">
+            <div class="modal-content">
+                <h3>Describe tu problema</h3>
+                <textarea class="modal-textarea" placeholder="Escribe aquí los detalles de tu problema..." id="problemaDesc"></textarea>
+                <div class="modal-buttons">
+                    <button class="modal-button modal-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button class="modal-button modal-send" onclick="enviarDescripcion()">Enviar</button>
+                </div>
+            </div>
+        </div>
+
+    <section class="sobre-nosotros" id="nosotros">
+        <h2>¿Por qué elegirnos?</h2>
+        <p style="max-width: 800px; margin: 2rem auto; line-height: 1.6;">
+            En CHAVA nos dedicamos a conectar técnicos altamente calificados con personas que necesitan soluciones rápidas y confiables. 
+            Somos tu mejor opción para resolver problemas de electricidad, plomería y reparación de electrodomésticos con 
+            profesionalismo y eficiencia. Nuestro compromiso es brindar un servicio seguro, oportuno y con garantía, 
+            asegurando que cada solución supere tus expectativas. ¡Confía en los expertos!
+        </p>
+    </section>
+
+    <section class="redes-sociales" id="redes">
+        <h2 style="color: #00256f;">Síguenos</h2>
+        <div class="social-icons">
+            <a target="_blank" href="https://www.facebook.com/profile.php?id=61573985127494" class="social-item">
+                <i class="fab fa-facebook fa-2x"></i>
+                <span>Facebook</span>
+            </a>
+            <a target="_blank" href="https://www.instagram.com/chava.szc?igsh=MWpxb3F6NGdqbGx0bg== " class="social-item">
+                <i class="fab fa-instagram fa-2x"></i>
+                <span>Instagram</span>
+            </a>
+            <a target="_blank" href="https://www.tiktok.com/@chava.szc" class="social-item">
+                <i class="fab fa-tiktok fa-2x"></i>
+                <span>TikTok  </span>
+            </a>
+            <a href="" class="social-item">
+                <i class="fab fa-twitter fa-2x"></i>
+                <span>Twitter</span>
+            </a>
+            <a href="" class="social-item">
+                <i class="fab fa-linkedin fa-2x"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="mailto:chava.szc@outlook.com" class="social-item">
+                <i class="fas fa-envelope fa-2x"></i>
+                <span>Correo</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Funcionalidad del menú móvil
+        const menuIcon = document.querySelector('.menu-icon');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const overlay = document.querySelector('.overlay');
+
+        menuIcon.addEventListener('click', () => {
+             mobileMenu.classList.toggle('active');
+             overlay.style.display = mobileMenu.classList.contains('active') ? 'block' : 'none';
+        });
+
+        function closeMenu() {
+            mobileMenu.classList.remove('active');
+            overlay.style.display = 'none';
+        } 
+
+        // Función para mostrar/ocultar detalles
+        function toggleDetails(card) {
+            const allCards = document.querySelectorAll('.servicio-card');
+            allCards.forEach(c => {
+                if(c !== card) c.classList.remove('active');
+            });
+            card.classList.toggle('active');
+        }
+
+        // Función para solicitar subservicio
+        function solicitarServicio(subservicio) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const ubicacion = `https://www.google.com/maps?q=${lat},${lon}`;
+                    const mensaje = `¡Hola! Quiero solicitar el servicio: ${subservicio}\nMi ubicación: ${ubicacion}`;
+                    window.open(`https://wa.me/59172620639?text=${encodeURIComponent(mensaje)}`, '_blank');
+                }, error => {
+                    alert("No se pudo obtener la ubicación. Asegúrate de permitir el acceso a la ubicación.");
+                    const mensaje = `¡Hola! Quiero solicitar el servicio: ${subservicio}`;
+                    window.open(`https://wa.me/59172620639?text=${encodeURIComponent(mensaje)}`, '_blank');
+                });
+            } else {
+                alert("Tu navegador no soporta la geolocalización.");
+                const mensaje = `¡Hola! Quiero solicitar el servicio: ${subservicio}`;
+                window.open(`https://wa.me/59172620639?text=${encodeURIComponent(mensaje)}`, '_blank');
+            }
+        }
+        // Variables para el modal
+        let servicioActual = '';
+        const modal = document.getElementById('otrosModal');
+        const descripcion = document.getElementById('problemaDesc');
+
+        // Función modificada para manejar "Otros"
+        function solicitarServicio(subservicio) {
+            if (subservicio.includes('Otros')) {
+                servicioActual = subservicio;
+                modal.style.display = 'block';
+            } else {
+                enviarWhatsApp(subservicio);
+            }
+        }
+
+        function cerrarModal() {
+            modal.style.display = 'none';
+            descripcion.value = '';
+            servicioActual = '';
+        }
+
+        function enviarDescripcion() {
+            if (descripcion.value.trim() === '') {
+                alert('Por favor describe tu problema antes de enviar');
+                return;
+            }
+            
+            const mensajeCompleto = `${servicioActual}\nDescripción del problema: ${descripcion.value.trim()}`;
+            enviarWhatsApp(mensajeCompleto);
+            cerrarModal();
+        }
+        
+        function enviarWhatsApp(mensaje) {
+    if (navigator.geolocation) {
+        // Mostrar loader mientras se obtiene la ubicación
+        showLoader();
+        
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const ubicacion = `https://www.google.com/maps?q=${lat},${lon}`;
+                redirectToWhatsApp(`${mensaje}\nMi ubicación: ${ubicacion}`);
+            },
+            error => {
+                // Si hay error, enviar sin ubicación
+                redirectToWhatsApp(`${mensaje}\n(No se pudo obtener ubicación)`);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 7000, // Aumentado para móviles
+                maximumAge: 0
+            }
+        );
+    } else {
+        redirectToWhatsApp(`${mensaje}\n(Geolocalización no soportada)`);
+    }
+}
+
+function redirectToWhatsApp(mensajeFinal) {
+    // Ocultar loader
+    hideLoader();
+    
+    // Forzar redirección después de 50ms (necesario para iOS)
+    setTimeout(() => {
+        window.location.href = `https://wa.me/59172620639?text=${encodeURIComponent(mensajeFinal)}`;
+    }, 50);
+}
+
+// Funciones para el loader (agregar al CSS)
+function showLoader() {
+    document.body.innerHTML += `
+        <div id="loader" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        ">
+            <div style="
+                border: 4px solid #00256f;
+                border-radius: 50%;
+                border-top: 4px solid transparent;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+            "></div>
+        </div>
+    `;
+}
+
+function hideLoader() {
+    const loader = document.getElementById('loader');
+    if (loader) loader.remove();
+}
+        
+
+       
+    </script>
+</body>
+</html>
